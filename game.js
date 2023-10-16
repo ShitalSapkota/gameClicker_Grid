@@ -1,21 +1,44 @@
 const gameArea = document.querySelector('.game-area');
 document.addEventListener('DOMContentLoaded', init);
-const game = {row:5, col:8, arr:[], ani:{}, max:5, actives:0};
+const game = {
+    row:5, 
+    col:8, 
+    arr:[], 
+    ani:{}, 
+    max:5, 
+    actives:0,
+    inPlay: false,
+    gameBtn: {}
+};
 
 function init() {
     gameArea.innerHTML = '';
+    game.gameBtn = createNewElement(gameArea, 'button', 'Start', 'btn');
+    game.gameBtn.addEventListener('click', ()=> {
+        if(game.gameBtn.textContent=='Start'){
+            game.inPlay = true;
+            game.ani = requestAnimationFrame(startGame);
+           game.gameBtn.textContent = 'Stop';
+        }else{
+            cancelAnimationFrame(game.ani);
+            game.gameBtn.textContent = 'Start';
+            game.inPlay = false;
+        }
+      
+    })
     const main = createNewElement(gameArea, 'div', '', 'gridContainer');
   
     buildGrid(main);
-    game.ani = requestAnimationFrame(startGame);
+    // game.ani = requestAnimationFrame(startGame);
 }
 
 function startGame(){
     if(game.actives < game.max){
         makeActive();
     }
-    
-    game.ani = requestAnimationFrame(startGame);
+    if(game.inPlay){
+        game.ani = requestAnimationFrame(startGame);
+    }
 }
 
 function makeActive(){
