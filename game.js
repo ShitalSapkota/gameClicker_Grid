@@ -1,5 +1,6 @@
 const gameArea = document.querySelector('.game-area');
 document.addEventListener('DOMContentLoaded', init);
+// creating global variables
 const game = {
     row:5, 
     col:8, 
@@ -7,19 +8,22 @@ const game = {
     ani:{}, 
     max:5, 
     actives:0,
-    inPlay: false,
-    gameBtn: {},
-    hit:0,
-    miss:0
+    inPlay: false,    // create logic
+    gameBtn: {},    // for the stop and start button
+    hit:0,      // to check how many times it hits the target
+    miss:0,    // to check how many times it missess the target
+    difc: 2    // to make game more difficult concepts only
 };
+
+// for creating new element passing variable to the function, createNewElement
 
 function init() {
     gameArea.innerHTML = '';
-    // const temp = `Score ${game.hit} vs ${game.miss} `;
-    game.scoreBoard = createNewElement(gameArea, 'div', 'Score', 'scoreboard');
-    game.gameBtn = createNewElement(gameArea, 'button', 'Start', 'btn');
+    const temp = `Score ${game.hit} vs ${game.miss} `;
+    game.scoreBoard = createNewElement(gameArea, 'div', temp, 'scoreboard');    // creating div section scoreboard
+    game.gameBtn = createNewElement(gameArea, 'button', 'Start', 'btn');       // creting button start/ stop
    
-    game.gameBtn.addEventListener('click', ()=> {
+    game.gameBtn.addEventListener('click', ()=> {                               // event for button
         if(game.gameBtn.textContent=='Start'){
             game.inPlay = true;
             game.ani = requestAnimationFrame(startGame);
@@ -40,7 +44,8 @@ function init() {
 function startGame(){
     const total = game.max > game.arr.length ?
     game.arr.length : game.max;
-    if(game.actives < total){
+    const temp = Math.floor(Math.random()*100);
+    if((game.actives < total) && temp > (50+(game.difc*10))){
         makeActive(makeSelection());
     }
     if(game.inPlay){
@@ -98,7 +103,7 @@ function buildGrid(main){
         dim.y += ' auto ';
         for(let x=0; x<game.col; x++){
             if(x==0){dim.x += ' auto ';}
-            const cell = y*game.col+x+1;
+            // const cell = y*game.col+x+1;
             const element_= createNewElement(main, 'div', '-', 'grid-item');
             // const element_= createNewElement(main, 'div', cell, 'grid-item');
             element_.counter = 0;
